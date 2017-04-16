@@ -86,6 +86,7 @@ Global
 		{8BE848FF-386B-494A-874B-14A47A5F0566}.Release|iPhone.Build.0 = Release|iPhone
 		{8BE848FF-386B-494A-874B-14A47A5F0566}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
 		{8BE848FF-386B-494A-874B-14A47A5F0566}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
+		{8BE848FF-386B-494A-874B-14A47A5F0566}.Debug|Any CPU.Build.0 = Debug|iPhone
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

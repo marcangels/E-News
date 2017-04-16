@@ -1,0 +1,9 @@
+﻿namespace E_News
+{
+	public class WordDB
+	{
+		public int ArticleID { get; set; }
+
+		public string Word { get; set; }
+	}
+}
