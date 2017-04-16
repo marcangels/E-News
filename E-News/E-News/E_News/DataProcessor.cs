@@ -9,15 +9,15 @@ namespace E_News
 	{
 		public static Dictionary<string,double> TfIdf(List<string> texts)
 		{
-			string targetText = string.Copy(texts[0]);
-			for (var i = 1; i < texts.Count; i++)
+			for (var i = 0; i < texts.Count; i++)
 			{
 				texts[i] = texts[i].ToLower();
 			}
+			string targetText = string.Copy(texts[0]);
 			var stopWords = File.ReadAllText(Utility.STOP_WORDS_FILENAME).Split(new[] { ", " }, StringSplitOptions.None);
 			Dictionary<string, double> result = new Dictionary<string, double>();
 			var words = Regex
-				.Matches(targetText.ToLower(), @"\b[\w']*\b")
+				.Matches(targetText, @"\b[\w']*\b")
 				.Cast<Match>()
 				.Select(m => m.Value)
 				.ToArray();

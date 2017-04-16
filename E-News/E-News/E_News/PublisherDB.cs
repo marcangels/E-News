@@ -1,5 +1,4 @@
-﻿using System;
-using SQLite;
+﻿using SQLite;
 namespace E_News
 {
 	public class PublisherDB

@@ -8,9 +8,9 @@ namespace E_News
 {
 	public static class Utility
 	{
-		public const string STOP_WORDS_FILENAME = @"/Users/moshi/Test/StopWords.csv"; // a configurer
-		public const string DATABASE_FILENAME = @"/Users/moshi/Test/db"; // a configurer
-		public const string IMAGE_DIRECTORY = @"/Users/moshi/Test/Images/"; // a configurer
+		public const string STOP_WORDS_FILENAME = @"/Users/moshi/Test/StopWords.csv";
+		public const string DATABASE_FILENAME = @"/Users/moshi/Test/db";
+		public const string IMAGE_DIRECTORY = @"/Users/moshi/Test/Images/";
 		public const int NUMBER_OF_WORDS = 10;
 		public static string[] PUBLISHERS = { "techcrunch", "ars-technica" };
 
@@ -118,35 +118,47 @@ namespace E_News
 							articleDB.Text = text;
 							Utility.DownloadImage(article.urlToImage, lastId);
 							List<string> tfIdfList = new List<string>() { articleDB.Text };
-							tfIdfList.AddRange(presentArticlesTexts);
+							foreach(string presentText in presentArticlesTexts)
+							{
+								tfIdfList.Add(presentText);
+							}
 							Dictionary<string, double> tfIdfs = DataProcessor.TfIdf(tfIdfList);
 							foreach (string word in tfIdfs.Keys)
 							{
 								WordDB wordDB = new WordDB()
 								{
 									ArticleID = lastId,
-									Word = word
+									Word = word,
+									TfIdfScore = tfIdfs[word]
 								};
 								db.Insert(wordDB);
 							}
 							db.Insert(articleDB);
+							presentArticlesTexts.Add(articleDB.Text);
 							lastId++;
 						}
 					}
 				}
 			}
+			// Premier article, tf*idfs = 0
+			db.Query<ArticleDB>("DELETE FROM WordDB WHERE ArticleId = 1");
+			Dictionary<string, double> tfIdfsFirstArticle = DataProcessor.TfIdf(presentArticlesTexts);
+			foreach (string word in tfIdfsFirstArticle.Keys)
+			{
+				WordDB wordDB = new WordDB(){ArticleID = 1, Word = word, TfIdfScore = tfIdfsFirstArticle[word]};
+				db.Insert(wordDB);
+			}
 		}
 
-		public static string[] Words(int articleId)
+		public static Dictionary<string, double> Words(int articleId)
 		{
 			var db = new SQLiteConnection(Utility.DATABASE_FILENAME);
-			var data = db.Query<WordDB>("SELECT Word FROM WordDB WHERE ArticleId = ?", articleId);
+			var data = db.Query<WordDB>("SELECT Word, TfIdfScore FROM WordDB WHERE ArticleId = ? ORDER BY TfIdfScore DESC", articleId);
 			var enumerator = data.GetEnumerator();
-			var result = new string[data.Count];
-			var i = 0;
+			var result = new Dictionary<string, double>();
 			while(enumerator.MoveNext())
 			{
-				result[i++] = enumerator.Current.Word;
+				result[enumerator.Current.Word] = enumerator.Current.TfIdfScore;
 			}
 			return result;
 

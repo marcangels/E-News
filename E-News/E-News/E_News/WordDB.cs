@@ -5,5 +5,7 @@
 		public int ArticleID { get; set; }
 
 		public string Word { get; set; }
+
+		public double TfIdfScore { get; set; }
 	}
 }
