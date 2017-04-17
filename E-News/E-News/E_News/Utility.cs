@@ -4,13 +4,24 @@ using System.Collections.Generic;
 using System.Net;
 using System.IO;
 using SQLite;
+using System.Diagnostics;
+
 namespace E_News
 {
 	public static class Utility
 	{
-		public const string STOP_WORDS_FILENAME = @"/Users/moshi/Test/StopWords.csv";
-		public const string DATABASE_FILENAME = @"/Users/moshi/Test/db";
-		public const string IMAGE_DIRECTORY = @"/Users/moshi/Test/Images/";
+#if __IOS__
+        public const string STOP_WORDS_FILENAME = @"E_News.iOS.StopWords.csv";
+#endif
+#if __ANDROID__
+		public static string STOP_WORDS_FILENAME = "E_News.Droid.StopWords.csv";
+#endif
+#if WINDOWS_PHONE
+        public const string STOP_WORDS_FILENAME = @"E_News.WinPhone.StopWords.csv";
+#endif
+
+		public static string DATABASE_FILENAME = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "db");
+		public static string IMAGE_DIRECTORY = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Images");
 		public const int NUMBER_OF_WORDS = 10;
 		public static string[] PUBLISHERS = { "techcrunch", "ars-technica" };
 
@@ -65,8 +76,10 @@ namespace E_News
 
 		public static void DownloadImage(string url, int id)
 		{
-			WebClient webClient = new WebClient();
-			webClient.DownloadFile(url, IMAGE_DIRECTORY+id);
+            WebClient webClient = new WebClient();
+			if (!Directory.Exists(IMAGE_DIRECTORY))
+				Directory.CreateDirectory(IMAGE_DIRECTORY);
+            webClient.DownloadFile(url, Path.Combine(IMAGE_DIRECTORY, "img" + id));
 		}
 
 		public static void DeleteDatabase()

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.10
+VisualStudioVersion = 15.0.26403.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "E_News", "E-News\E_News\E_News.shproj", "{13A886BA-AEF2-4DB6-8B09-897706A8EE98}"
 EndProject
@@ -77,6 +77,7 @@ Global
 		{8BE848FF-386B-494A-874B-14A47A5F0566}.AppStore|iPhoneSimulator.ActiveCfg = AppStore|iPhoneSimulator
 		{8BE848FF-386B-494A-874B-14A47A5F0566}.AppStore|iPhoneSimulator.Build.0 = AppStore|iPhoneSimulator
 		{8BE848FF-386B-494A-874B-14A47A5F0566}.Debug|Any CPU.ActiveCfg = Debug|iPhone
+		{8BE848FF-386B-494A-874B-14A47A5F0566}.Debug|Any CPU.Build.0 = Debug|iPhone
 		{8BE848FF-386B-494A-874B-14A47A5F0566}.Debug|iPhone.ActiveCfg = Debug|iPhone
 		{8BE848FF-386B-494A-874B-14A47A5F0566}.Debug|iPhone.Build.0 = Debug|iPhone
 		{8BE848FF-386B-494A-874B-14A47A5F0566}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
@@ -86,7 +87,6 @@ Global
 		{8BE848FF-386B-494A-874B-14A47A5F0566}.Release|iPhone.Build.0 = Release|iPhone
 		{8BE848FF-386B-494A-874B-14A47A5F0566}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
 		{8BE848FF-386B-494A-874B-14A47A5F0566}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
-		{8BE848FF-386B-494A-874B-14A47A5F0566}.Debug|Any CPU.Build.0 = Debug|iPhone
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

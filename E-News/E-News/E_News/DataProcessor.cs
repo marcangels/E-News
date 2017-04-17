@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.IO;
+using System.Reflection;
+
 namespace E_News
 {
 	public static class DataProcessor
@@ -14,7 +16,16 @@ namespace E_News
 				texts[i] = texts[i].ToLower();
 			}
 			string targetText = string.Copy(texts[0]);
-			var stopWords = File.ReadAllText(Utility.STOP_WORDS_FILENAME).Split(new[] { ", " }, StringSplitOptions.None);
+
+			var assembly = typeof(DataProcessor).GetTypeInfo().Assembly;
+			Stream stream = assembly.GetManifestResourceStream(Utility.STOP_WORDS_FILENAME);
+			string text = "";
+			using (var reader = new System.IO.StreamReader(stream))
+			{
+				text = reader.ReadToEnd();
+			}
+
+			var stopWords = text.Split(new[] { ", " }, StringSplitOptions.None);
 			Dictionary<string, double> result = new Dictionary<string, double>();
 			var words = Regex
 				.Matches(targetText, @"\b[\w']*\b")

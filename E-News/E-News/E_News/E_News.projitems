@@ -20,7 +20,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Articles.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataProcessor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Parser.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Program.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PublisherDB.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utility.cs" />
@@ -34,6 +33,11 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)App.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)StopWords.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
 </Project>
