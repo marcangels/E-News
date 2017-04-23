@@ -11,13 +11,13 @@ namespace E_News
 	public static class Utility
 	{
 #if __IOS__
-        public const string STOP_WORDS_FILENAME = @"E_News.iOS.StopWords.csv";
+		public const string STOP_WORDS_FILENAME = @"E_News.iOS.StopWords.csv";
 #endif
 #if __ANDROID__
 		public static string STOP_WORDS_FILENAME = "E_News.Droid.StopWords.csv";
 #endif
 #if WINDOWS_PHONE
-        public const string STOP_WORDS_FILENAME = @"E_News.WinPhone.StopWords.csv";
+		public const string STOP_WORDS_FILENAME = @"E_News.WinPhone.StopWords.csv";
 #endif
 
 		public static string DATABASE_FILENAME = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "db");
@@ -76,10 +76,10 @@ namespace E_News
 
 		public static void DownloadImage(string url, int id)
 		{
-            WebClient webClient = new WebClient();
+			WebClient webClient = new WebClient();
 			if (!Directory.Exists(IMAGE_DIRECTORY))
 				Directory.CreateDirectory(IMAGE_DIRECTORY);
-            webClient.DownloadFile(url, Path.Combine(IMAGE_DIRECTORY, "img" + id));
+			webClient.DownloadFile(url, Path.Combine(IMAGE_DIRECTORY, "img" + id));
 		}
 
 		public static void DeleteDatabase()

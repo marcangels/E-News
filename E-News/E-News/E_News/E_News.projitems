@@ -12,18 +12,24 @@
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)CompleteArticles\CompleteArticles.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)CompleteArticles\ListArticles.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Article.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ArticleDB.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Articles.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DataProcessor.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Parser.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)PublisherDB.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Reader.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utility.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)WordDB.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CompleteArticles\Modeles\Article.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CompleteArticles\Modeles\ArticleDB.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CompleteArticles\Modeles\Articles.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CompleteArticles\DataProcessor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CompleteArticles\Parser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CompleteArticles\Modeles\PublisherDB.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CompleteArticles\Reader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CompleteArticles\Utility.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CompleteArticles\Modeles\WordDB.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)MainPage.xaml">
@@ -39,5 +45,19 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)StopWords.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CompleteArticles\CompleteArticles.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CompleteArticles\ListArticles.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)CompleteArticles\" />
+    <Folder Include="$(MSBuildThisFileDirectory)CompleteArticles\Modeles\" />
   </ItemGroup>
 </Project>

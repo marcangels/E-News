@@ -13,7 +13,7 @@ namespace E_News
 		{
 			InitializeComponent();
 
-			MainPage = new E_News.MainPage();
+			MainPage = new NavigationPage(new E_News.MainPage());
 		}
 
 		protected override void OnStart ()

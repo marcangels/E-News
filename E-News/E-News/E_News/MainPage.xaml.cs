@@ -17,21 +17,14 @@ namespace E_News
 		{
 			InitializeComponent();
 
-            StackLayout mainStack = new StackLayout();
-            Utility.DeleteDatabase();
-            Console.WriteLine("Database deleted.");
-            Utility.CreateDatabase();
-            Console.WriteLine("Database created.");
-            Utility.UpdateDatabase();
-            Console.WriteLine("Database updated.");
-            var db = new SQLiteConnection(Utility.DATABASE_FILENAME);
-            var articles = db.Table<ArticleDB>();
-			foreach (var item in articles)
+			Title = "E-News";
+
+			Button button = new Button() { Text = "Complete articles" };
+			button.Clicked += async (s,e) => await Navigation.PushAsync(new ListArticles());
+			Content = new StackLayout
 			{
-				mainStack.Children.Add(new Label() { Text = item.Title });
-			}
-            
-            Content = mainStack;
-        }
+				Children = { button }
+			};
+		}
 	}
 }
