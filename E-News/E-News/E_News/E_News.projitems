@@ -18,6 +18,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)CompleteArticles\ListArticles.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)CompleteArticles\Modeles\ScoreDB.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CompleteArticles\ResultsView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -61,7 +65,8 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)CompleteArticles\" />
-    <Folder Include="$(MSBuildThisFileDirectory)CompleteArticles\Modeles\" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CompleteArticles\ResultsView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>

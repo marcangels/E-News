@@ -77,8 +77,12 @@ namespace E_News
 				text = text.Remove(index, word.Length);
 				text = text.Insert(index, "_");
 			}
-			dicWords.OrderBy(pair => pair.Value);
-			List<string> lstWords = dicWords.Keys.ToList();
+			var tmpDicWords = dicWords.OrderBy(pair => pair.Value);
+			List<string> lstWords = new List<string>();
+			foreach (var item in tmpDicWords)
+			{
+				lstWords.Add(item.Key);
+			}
 			return Tuple.Create(text, lstWords);
 		}
 	}

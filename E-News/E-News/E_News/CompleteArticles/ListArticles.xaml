@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="E_News.ListArticles"
-             Title="E-News - Choix d'un article">
+             Title="Choose an article">
     <ListView ItemsSource="{Binding Articles}"
             ItemTapped="Handle_ItemTapped"
             ItemSelected="Handle_ItemSelected"
@@ -27,7 +27,7 @@
         <ListView.ItemTemplate>
             <DataTemplate>
                 <ViewCell>
-                    <Label Text="{Binding Title}"/>
+                    <Label Text="{Binding Title}" Margin="5,5,5,5" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" FontAttributes="Bold"/>
                 </ViewCell>
             </DataTemplate>
         </ListView.ItemTemplate>

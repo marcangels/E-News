@@ -19,7 +19,7 @@ namespace E_News
 
 			Title = "E-News";
 
-			Button button = new Button() { Text = "Complete articles" };
+			Button button = new Button() { Text = "Fill in the gaps" };
 			button.Clicked += async (s,e) => await Navigation.PushAsync(new ListArticles());
 			Content = new StackLayout
 			{

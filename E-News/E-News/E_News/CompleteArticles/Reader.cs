@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Linq;
 using System.Text;
+using System.Diagnostics;
+
 namespace E_News
 {
 	public static class Reader
@@ -28,18 +30,27 @@ namespace E_News
 
         public static List<GuardianArticle> GuardianArticles()
         {
-			HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://content.guardianapis.com/search?api-key=bd9f7390-6744-42f0-9074-af4733475efd&show-fields=body&format=json");
-			request.Method = WebRequestMethods.Http.Get;
-			request.Accept = "application/json";
-			var response = (HttpWebResponse)request.GetResponse();
-			string text;
-			using (var sr = new StreamReader(response.GetResponseStream()))
+			try
 			{
-				text = sr.ReadToEnd();
+				HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://content.guardianapis.com/search?api-key=bd9f7390-6744-42f0-9074-af4733475efd&show-fields=body&format=json");
+				request.Method = WebRequestMethods.Http.Get;
+				request.Accept = "application/json";
+				var response = (HttpWebResponse)request.GetResponse();
+
+				string text;
+				using (var sr = new StreamReader(response.GetResponseStream()))
+				{
+					text = sr.ReadToEnd();
+				}
+				//JavaScriptSerializer ser = new JavaScriptSerializer();
+				var result = JsonConvert.DeserializeObject<GuardianObject>(text);
+				return result.response.results;
+			} catch	(Exception e)
+			{
+				Debug.WriteLine(e.Message + e.StackTrace);
+				throw;
 			}
-			//JavaScriptSerializer ser = new JavaScriptSerializer();
-			var result = JsonConvert.DeserializeObject<GuardianObject>(text);
-            return result.response.results;
+			
         }
 
 		public static string Content(string url)

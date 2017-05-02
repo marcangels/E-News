@@ -78,6 +78,7 @@ namespace E_News
 			{
 				Articles.Add(item);
 			};
+			Articles.OrderByDescending(ele => ele.Ticks);
 		}
 
 		bool busy;

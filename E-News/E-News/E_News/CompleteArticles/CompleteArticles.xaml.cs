@@ -14,78 +14,99 @@ namespace E_News
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class CompleteArticles : ContentPage
 	{
-		public List<EntryViewModel> LstEntryViewModel;
+		public List<PickerViewModel> LstPickerViewModel;
 		private ArticleDB article;
+		private string[] wordsToTakeIntoAccount;
 
 		public CompleteArticles (ArticleDB pArticle)
 		{
 			InitializeComponent ();
 			article = pArticle;
 			GenerateViewAsync();
-			LstEntryViewModel = new List<EntryViewModel>();
+			LstPickerViewModel = new List<PickerViewModel>();
 		}
 
 		private StackLayout GenerateView()
 		{
-			StackLayout mainStack = new StackLayout();
-			Label currentLabel = new Label();
-			var tuple = GetExerciceText();
-			string[] Words = tuple.Item1.Split(' ');
-			List<string> CorrectWords = tuple.Item2;
-			mainStack.Children.Add(currentLabel);
-			string word;
-			int j = 0;
-			for (int i = 0; i < Words.Length; i++)
+			try
 			{
-				word = Words[i]; // TODO il y a des cas où on a "_-to-_"
-				if (Regex.IsMatch(word, "[,;:.!?]*_[,;:.!?]*"))
+				StackLayout mainStack = new StackLayout();
+				var margin = new Thickness(5, 5, 5, 20);
+				Label title = new Label()
 				{
-					if (word.Length > 1)
+					Text = article.Title,
+					FontAttributes = FontAttributes.Bold,
+					FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
+					VerticalTextAlignment = TextAlignment.Center,
+					HorizontalTextAlignment = TextAlignment.Center,
+					Margin = new Thickness(5, 5, 5, 20)
+			}; 
+				mainStack.Children.Add(title);
+				Label currentLabel = new Label() { FontSize = Device.GetNamedSize(NamedSize.Default, typeof(Label)), Margin = new Thickness(5,5,5,5) };
+				var tuple = GetExerciceText();
+				string[] Words = tuple.Item1.Split(' ');
+				List<string> CorrectWords = tuple.Item2;
+				mainStack.Children.Add(currentLabel);
+				string word;
+				int j = 0;
+				for (int i = 0; i < Words.Length; i++)
+				{
+					word = Words[i];
+					if (Regex.IsMatch(word, "[,;:.!?]*_[,;:.!?]*"))
 					{
-						int index = word.IndexOf('_');
-						string start = word.Substring(0, index);
-						string end = word.Substring(index + 1);
-						
+						if (word.Length > 1)
+						{
+							int index = word.IndexOf('_');
+							string start = word.Substring(0, index);
+							string end = word.Substring(index + 1);
+
+						}
+						PickerViewModel pickerVM = new PickerViewModel()
+						{
+							lstWords = CorrectWords,
+							CorrectWord = CorrectWords[j]
+						};
+						LstPickerViewModel.Add(pickerVM);
+						j++;
+						Picker picker = new Picker()
+						{
+							BindingContext = pickerVM,
+							ItemsSource = wordsToTakeIntoAccount
+						};
+						picker.SetBinding(Picker.SelectedItemProperty, "SelectedWord");
+
+						mainStack.Children.Add(picker);
+						currentLabel = new Label() { FontSize = Device.GetNamedSize(NamedSize.Default, typeof(Label)), Margin = new Thickness(5, 5, 5, 5) };
+						mainStack.Children.Add(currentLabel);
+					}
+					else
+					{
+						currentLabel.Text += word + " ";
 					}
 
-					EntryViewModel entryVM = new EntryViewModel() {
-						Position = i,
-						WordOrig = CorrectWords[j]
-					};
-					j++;
-					LstEntryViewModel.Add(entryVM);
-					Entry entry = new Entry()
-					{
-						BindingContext = entryVM
-					};
-					entry.SetBinding(Entry.TextProperty, "EntryText");
-					mainStack.Children.Add(entry);
-					currentLabel = new Label();
-					//while (j < tmp.Length)
-					//{
-					//	currentLabel.Text += tmp[j];
-					//	j++;
-					//}
-					mainStack.Children.Add(currentLabel);
 				}
-				else
+				Button ValidateButton = new Button()
 				{
-					currentLabel.Text += word + " ";
-				}
-			}
-			Button ValidateButton = new Button()
+					Text = "Check your choices"
+				};
+				ValidateButton.Clicked += ValidateHandler;
+				mainStack.Children.Add(ValidateButton);
+				return mainStack;
+			} catch(Exception e)
 			{
-				Text = "Validate"
-			};
-			ValidateButton.Clicked += (s, e) =>
-				LstEntryViewModel.ForEach(ele => Debug.WriteLine($"{ele.EntryText}:{ele.WordOrig} => {ele.IsCorrect}"));
-			mainStack.Children.Add(ValidateButton);
-			return mainStack;
+				Debug.WriteLine(e);
+				return null;
+			}
 		}
 
-		private void GetCorrectWords()
+		public async void ValidateHandler(object sender, EventArgs e)
 		{
-
+			int score = 0;
+			LstPickerViewModel.ForEach(ele => {
+				Debug.WriteLine($"{ele.SelectedWord}:{ele.CorrectWord} => {ele.IsCorrect}");
+				if (ele.IsCorrect) score++;
+			});
+			await Navigation.PushAsync(new ResultsView(new ScoreDB() { score = score, timestamp = DateTime.Now.Ticks }));
 		}
 
 		private async void GenerateViewAsync()
@@ -102,32 +123,30 @@ namespace E_News
 			Dictionary<string, double> wordsAndScores = Utility.Words(article.ID);
 			string[] words = new string[wordsAndScores.Count];
 			wordsAndScores.Keys.CopyTo(words, 0);
-			string[] wordsToTakeIntoAccount = new string[Utility.NUMBER_OF_WORDS];
+			wordsToTakeIntoAccount = new string[Utility.NUMBER_OF_WORDS];
 			Array.Copy(words, wordsToTakeIntoAccount, Utility.NUMBER_OF_WORDS);
 			var firstClozeTest = DataProcessor.ClozeTest(article.Text, wordsToTakeIntoAccount);
 			return firstClozeTest;
 		}
+		
 
-		private int GetStartPonctuation(string str)
-		{
-			return 0;
-		}
 
-		public class EntryViewModel : INotifyPropertyChanged
+		public class PickerViewModel : INotifyPropertyChanged
 		{
-			private string entryText;
-			public string EntryText
+			public List<string> lstWords;
+			private string selectedWord;
+			public string SelectedWord
 			{
-				get { return entryText; }
+				get { return selectedWord; }
 				set
 				{
-					entryText = value;
-					RaisePropertyChanged("EntryText");
+					selectedWord = value;
+					RaisePropertyChanged("SelectedWord");
 				}
 			}
 			public int Position { get; set; }
-			public string WordOrig { get; set; } = "";
-			public bool IsCorrect => EntryText == WordOrig;
+			public string CorrectWord { get; set; } = "";
+			public bool IsCorrect => SelectedWord == CorrectWord;
 
 			public event PropertyChangedEventHandler PropertyChanged;
 
