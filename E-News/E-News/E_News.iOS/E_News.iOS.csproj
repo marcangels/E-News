@@ -49,7 +49,7 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
     <MtouchArch>ARMv7, ARM64</MtouchArch>
-    <CodesignProvision>d646269d-5d32-4edf-9f49-88d2760fa9d7</CodesignProvision>
+    <CodesignProvision>2414b6be-cffb-498e-b71a-0a47e4c6fa11</CodesignProvision>
     <CodesignKey>iPhone Developer: yelen.per3@etu.univ-lorraine.fr (L7RPCK3Z53)</CodesignKey>
     <MtouchDebug>true</MtouchDebug>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>

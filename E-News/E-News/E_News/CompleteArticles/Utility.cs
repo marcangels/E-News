@@ -43,7 +43,7 @@ namespace E_News
 		{
 			var result = 0;
 			var index = target.IndexOf(toSearch, System.StringComparison.Ordinal);
-			while(index != -1)
+			while (index != -1)
 			{
 				result++;
 				index = target.IndexOf(toSearch, index + 1, System.StringComparison.Ordinal);
@@ -54,9 +54,9 @@ namespace E_News
 		public static int CountAppearance(List<string> texts, string word)
 		{
 			var result = 0;
-			foreach(string text in texts)
+			foreach (string text in texts)
 			{
-				if(text.Contains(word))
+				if (text.Contains(word))
 				{
 					result++;
 				}
@@ -77,9 +77,7 @@ namespace E_News
 		public static void DownloadImage(string url, int id)
 		{
 			WebClient webClient = new WebClient();
-			if (!Directory.Exists(IMAGE_DIRECTORY))
-				Directory.CreateDirectory(IMAGE_DIRECTORY);
-			webClient.DownloadFile(url, Path.Combine(IMAGE_DIRECTORY, "img" + id));
+			webClient.DownloadFile(url, IMAGE_DIRECTORY + id);
 		}
 
 		public static void DeleteDatabase()
@@ -109,56 +107,44 @@ namespace E_News
 			int lastId = presentArticlesTitles.Count;
 			lastId++;
 			var articleDB = new ArticleDB();
-			foreach (string publisher in Utility.PUBLISHERS)
-			{
-				articleDB.Publisher = publisher;
-				List<Article> articles = Reader.Articles(publisher);
-				foreach (Article article in articles)
-				{
-					var url = article.url;
-					if (publisher.Equals("techcrunch") && !Regex.IsMatch(url, "techcrunch.com/[0-9]{4}/[0-9]{2}/[0-9]{2}/"))
-					{
-
-					}
-					else
-					{
-						if (!presentArticlesTitles.Contains(article.title))
-						{
-							var content = Reader.Content(url);
-							string text = Parser.Parse(content, publisher);
-							articleDB.Title = article.title;
-							articleDB.Ticks = Utility.DateToTicks(article.publishedAt);
-							articleDB.Text = text;
-							Utility.DownloadImage(article.urlToImage, lastId);
-							List<string> tfIdfList = new List<string>() { articleDB.Text };
-							foreach(string presentText in presentArticlesTexts)
-							{
-								tfIdfList.Add(presentText);
-							}
-							Dictionary<string, double> tfIdfs = DataProcessor.TfIdf(tfIdfList);
-							foreach (string word in tfIdfs.Keys)
-							{
-								WordDB wordDB = new WordDB()
-								{
-									ArticleID = lastId,
-									Word = word,
-									TfIdfScore = tfIdfs[word]
-								};
-								db.Insert(wordDB);
-							}
-							db.Insert(articleDB);
-							presentArticlesTexts.Add(articleDB.Text);
-							lastId++;
-						}
-					}
-				}
-			}
+            List<GuardianArticle> articles = Reader.GuardianArticles();
+            foreach (GuardianArticle article in articles)
+            {
+                if (!presentArticlesTitles.Contains(article.webTitle) && article.type.Equals("article"))
+                {
+                    articleDB.Title = article.webTitle;
+                    articleDB.Ticks = Utility.DateToTicks(article.webPublicationDate);
+                    articleDB.Text = Parser.ParseGuardian(article.fields.body);
+                    string lowerCaseText = articleDB.Text.ToLower();
+                    List<string> tfIdfList = new List<string>() { articleDB.Text };
+                    foreach (string presentText in presentArticlesTexts)
+                    {
+                        tfIdfList.Add(presentText);
+                    }
+                    Dictionary<string, double> tfIdfs = DataProcessor.TfIdf(tfIdfList);
+                    foreach (string word in tfIdfs.Keys)
+                    {
+                        WordDB wordDB = new WordDB()
+                        {
+                            ArticleID = lastId,
+                            Word = word,
+                            TfIdfScore = tfIdfs[word],
+                            StringIndex = lowerCaseText.IndexOf(word, StringComparison.Ordinal)
+                        };
+                        db.Insert(wordDB);
+                    }
+                    db.Insert(articleDB);
+                    presentArticlesTexts.Add(articleDB.Text);
+                    lastId++;
+                }
+            }
 			// Premier article, tf*idfs = 0
 			db.Query<ArticleDB>("DELETE FROM WordDB WHERE ArticleId = 1");
+			string firstLowerCaseText = presentArticlesTexts[0].ToLower();
 			Dictionary<string, double> tfIdfsFirstArticle = DataProcessor.TfIdf(presentArticlesTexts);
 			foreach (string word in tfIdfsFirstArticle.Keys)
 			{
-				WordDB wordDB = new WordDB(){ArticleID = 1, Word = word, TfIdfScore = tfIdfsFirstArticle[word]};
+				WordDB wordDB = new WordDB() { ArticleID = 1, Word = word, TfIdfScore = tfIdfsFirstArticle[word], StringIndex = firstLowerCaseText.IndexOf(word, StringComparison.Ordinal) };
 				db.Insert(wordDB);
 			}
 		}
@@ -169,7 +155,7 @@ namespace E_News
 			var data = db.Query<WordDB>("SELECT Word, TfIdfScore FROM WordDB WHERE ArticleId = ? ORDER BY TfIdfScore DESC", articleId);
 			var enumerator = data.GetEnumerator();
 			var result = new Dictionary<string, double>();
-			while(enumerator.MoveNext())
+			while (enumerator.MoveNext())
 			{
 				result[enumerator.Current.Word] = enumerator.Current.TfIdfScore;
 			}

@@ -23,7 +23,7 @@
     <key>MinimumOSVersion</key>
     <string>8.0</string>
     <key>CFBundleDisplayName</key>
-    <string>E_News</string>
+    <string>E-News</string>
     <key>CFBundleIdentifier</key>
     <string>com.yourcompany.E-News</string>
     <key>CFBundleVersion</key>

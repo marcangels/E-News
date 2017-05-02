@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 using System.Net;
 using System.IO;
 using Newtonsoft.Json;
@@ -21,8 +21,8 @@ namespace E_News
 			{
 				text = sr.ReadToEnd();
 			}
-			//JavaScriptSerializer ser = new JavaScriptSerializer();
-			var result = JsonConvert.DeserializeObject<Articles>(text);
+			JavaScriptSerializer ser = new JavaScriptSerializer();
+			var result = ser.Deserialize<Articles>(text);
 			return result.articles;
 		}
 
@@ -37,8 +37,8 @@ namespace E_News
 			{
 				text = sr.ReadToEnd();
 			}
-			//JavaScriptSerializer ser = new JavaScriptSerializer();
-			var result = JsonConvert.DeserializeObject<GuardianObject>(text);
+			JavaScriptSerializer ser = new JavaScriptSerializer();
+			var result = ser.Deserialize<GuardianObject>(text);
             return result.response.results;
         }
 

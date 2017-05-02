@@ -30,6 +30,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)CompleteArticles\Reader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CompleteArticles\Utility.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CompleteArticles\Modeles\WordDB.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CompleteArticles\Modeles\GuardianArticle.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CompleteArticles\Modeles\GuardianBody.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CompleteArticles\Modeles\GuardianObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CompleteArticles\Modeles\GuardianResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)MainPage.xaml">

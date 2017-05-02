@@ -7,5 +7,7 @@
 		public string Word { get; set; }
 
 		public double TfIdfScore { get; set; }
+
+        public int StringIndex { get; set; }
 	}
 }
