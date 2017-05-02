@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.IO;
 using System.Reflection;
+using System.Diagnostics;
 
 namespace E_News
 {
@@ -62,13 +63,23 @@ namespace E_News
 			return result;
 		}
 
-		public static string ClozeTest(string text, string[] words)
+		public static Tuple<string, List<string>> ClozeTest(string text, string[] words)
 		{
+			string tmp = text.ToLower();
+			Dictionary<string, int> dicWords = new Dictionary<string, int>();
 			foreach(string word in words)
 			{
-				text = Regex.Replace(text, word, "_", RegexOptions.IgnoreCase);
+				var index = tmp.IndexOf(word);
+				dicWords[word] = index;
+				Debug.WriteLine($"test: {index}, {word}");
+				tmp = tmp.Remove(index, word.Length);
+				tmp = tmp.Insert(index, "_");
+				text = text.Remove(index, word.Length);
+				text = text.Insert(index, "_");
 			}
-			return text;
+			dicWords.OrderBy(pair => pair.Value);
+			List<string> lstWords = dicWords.Keys.ToList();
+			return Tuple.Create(text, lstWords);
 		}
 	}
 }

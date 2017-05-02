@@ -29,22 +29,17 @@ namespace E_News
 		{
 			StackLayout mainStack = new StackLayout();
 			Label currentLabel = new Label();
-			string[] Words = GetExerciceText().Split(' ');
-			string[] CorrectWords = article.Text.Split(' ');
+			var tuple = GetExerciceText();
+			string[] Words = tuple.Item1.Split(' ');
+			List<string> CorrectWords = tuple.Item2;
 			mainStack.Children.Add(currentLabel);
 			string word;
+			int j = 0;
 			for (int i = 0; i < Words.Length; i++)
 			{
 				word = Words[i]; // TODO il y a des cas où on a "_-to-_"
 				if (Regex.IsMatch(word, "[,;:.!?]*_[,;:.!?]*"))
 				{
-					//char[] tmp = word.ToCharArray();
-					//int j = 0;
-					//while (tmp[j] != '_' && j < tmp.Length)
-					//{
-					//	currentLabel.Text += tmp[j];
-					//	j++;
-					//}
 					if (word.Length > 1)
 					{
 						int index = word.IndexOf('_');
@@ -55,8 +50,9 @@ namespace E_News
 
 					EntryViewModel entryVM = new EntryViewModel() {
 						Position = i,
-						WordOrig = CorrectWords[i].Trim(new []{ ',', ';', '.', ':', '!', '?' })
+						WordOrig = CorrectWords[j]
 					};
+					j++;
 					LstEntryViewModel.Add(entryVM);
 					Entry entry = new Entry()
 					{
@@ -101,14 +97,14 @@ namespace E_News
 			};
 		}
 
-		private string GetExerciceText()
+		private Tuple<string, List<string>> GetExerciceText()
 		{
 			Dictionary<string, double> wordsAndScores = Utility.Words(article.ID);
 			string[] words = new string[wordsAndScores.Count];
 			wordsAndScores.Keys.CopyTo(words, 0);
 			string[] wordsToTakeIntoAccount = new string[Utility.NUMBER_OF_WORDS];
 			Array.Copy(words, wordsToTakeIntoAccount, Utility.NUMBER_OF_WORDS);
-			string firstClozeTest = DataProcessor.ClozeTest(article.Text, wordsToTakeIntoAccount);
+			var firstClozeTest = DataProcessor.ClozeTest(article.Text, wordsToTakeIntoAccount);
 			return firstClozeTest;
 		}
 
