@@ -59,23 +59,25 @@ namespace E_News
 		{
 			IsBusy = true;
 			//Load Data Here
-			await Task.Run(() => {
-				Articles.Clear();
-				Utility.DeleteDatabase();
-				Debug.WriteLine("Database deleted.");
-				Utility.CreateDatabase();
-				Debug.WriteLine("Database created.");
-				Utility.UpdateDatabase();
-				Debug.WriteLine("Database updated.");
-				var db = new SQLiteConnection(Utility.DATABASE_FILENAME);
-				var tmp = db.Table<ArticleDB>();
-				foreach (var item in tmp)
-				{
-					Articles.Add(item);
-				};
-			});
-
+			await Task.Run(() => GetArticles());
 			IsBusy = false;
+		}
+
+		private void GetArticles()
+		{
+			Articles.Clear();
+			Utility.DeleteDatabase();
+			Debug.WriteLine("Database deleted.");
+			Utility.CreateDatabase();
+			Debug.WriteLine("Database created.");
+			Utility.UpdateDatabase();
+			Debug.WriteLine("Database updated.");
+			var db = new SQLiteConnection(Utility.DATABASE_FILENAME);
+			var tmp = db.Table<ArticleDB>();
+			foreach (var item in tmp)
+			{
+				Articles.Add(item);
+			};
 		}
 
 		bool busy;
