@@ -90,6 +90,7 @@ namespace E_News
 			var db = new SQLiteConnection(Utility.DATABASE_FILENAME);
 			db.CreateTable<ArticleDB>();
 			db.CreateTable<WordDB>();
+            db.CreateTable<ScoreDB>();
 		}
 
 		public static void UpdateDatabase()
@@ -170,7 +171,7 @@ namespace E_News
 			DateTime currentDate = new DateTime(now.Year, now.Month, now.Day, 0, 0, 0);
             currentDate = currentDate.AddDays(-7);
             long currentTicks = currentDate.Ticks;
-            var data = db.Query<ScoreDB>("SELECT timestamp, score FROM ScoreDB WHERE timestamp >= ?", currentTicks);
+            var data = db.Query<ScoreDB>("SELECT Timestamp, Score FROM ScoreDB WHERE timestamp >= ?", currentTicks);
             var enumerator = data.GetEnumerator();
             List<Tuple<long, int>> ticksAndScores = new List<Tuple<long, int>>();
             while (enumerator.MoveNext())

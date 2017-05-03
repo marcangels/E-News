@@ -6,7 +6,7 @@ namespace E_News
 {
 	public class ScoreDB
 	{
-		public long timestamp;
-		public int score;
+        public long Timestamp { get; set; }
+        public int Score { get; set; }
 	}
 }
