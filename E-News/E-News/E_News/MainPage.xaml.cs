@@ -14,35 +14,41 @@ namespace E_News
 	public partial class MainPage : ContentPage
 	{
 		StackLayout mainStack;
+		Label labProgress;
 
 		public MainPage()
 		{
 			InitializeComponent();
 			//ManageDB();
 			Title = "E-News";
+			Appearing += AppearingHandler;
 
-			Button button = new Button() { Text = "Fill in the gaps" };
+			Button button = new Button() { Text = "Let's go!" };
 			button.Clicked += async (s,e) => await Navigation.PushAsync(new ListArticles());
-			mainStack = new StackLayout
+			labProgress = new Label()
 			{
-				Children = { button }
-			};
-			Content = mainStack;
-			GenerateView();
-		}
-
-		private async void GenerateView()
-		{
-			await Task.Factory.StartNew(() => ManageDB());
-			string progress = Utility.Progression();
-			Label lab = new Label()
-			{
-				Text = progress,
+				Text = "",
 				VerticalTextAlignment = TextAlignment.Center,
 				HorizontalTextAlignment = TextAlignment.Center,
 				FontAttributes = FontAttributes.Bold
 			};
-			mainStack.Children.Add(lab);
+			mainStack = new StackLayout
+			{
+				Children = { button, labProgress }
+			};
+			Content = mainStack;
+			//ShowProgression();
+		}
+
+		private async void ShowProgression()
+		{
+			await Task.Factory.StartNew(() => ManageDB());
+			labProgress.Text = Utility.Progression();
+		}
+
+		private void AppearingHandler(object sender, EventArgs e)
+		{
+			ShowProgression();
 		}
 
 		private void ManageDB()

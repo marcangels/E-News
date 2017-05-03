@@ -26,6 +26,7 @@ namespace E_News
 
 		private async void GenerateView()
 		{
+			NavigationPage.SetHasBackButton(this, false);
 			Thickness margin = new Thickness(5, 5, 5, 5);
 			Label lab = new Label()
 			{
@@ -37,21 +38,11 @@ namespace E_News
 				Progress = 0,
 				Margin = margin
 			};
-			//progressBar.PropertyChanged += (s, e) =>
-			//{
-			//	ProgressBar prog = s as ProgressBar;
-			//	if (e.PropertyName == "Progress")
-			//	{
-			//		if (prog.Progress < 0.25)
-			//			 = Color.Red;
-			//		else if (prog.Progress < 0.5)
-			//			prog.BackgroundColor = Color.Orange;
-			//		else if (prog.Progress < 0.75)
-			//			prog.BackgroundColor = Color.Yellow;
-			//		else
-			//			prog.BackgroundColor = Color.Green;
-			//	}
-			//};
+			Button menuButton = new Button()
+			{
+				Text = "Get back home"
+			};
+			menuButton.Clicked += async (s, e) => await Navigation.PopToRootAsync();
 			StackLayout mainStack = new StackLayout()
 			{
 				Children = { progressBar }
@@ -59,6 +50,10 @@ namespace E_News
 			Content = mainStack;
 			await progressBar.ProgressTo(((double)Score.Score) / 10, 1500, Easing.CubicIn);
 			mainStack.Children.Add(lab);
+			mainStack.Children.Add(menuButton);
+			
 		}
+
+
 	}
 }
