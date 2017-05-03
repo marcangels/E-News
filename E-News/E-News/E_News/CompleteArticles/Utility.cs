@@ -179,12 +179,12 @@ namespace E_News
                 ticksAndScores.Add(Tuple.Create(enumerator.Current.Timestamp, enumerator.Current.Score));
             }
             var averageScores = AverageScores(ticksAndScores);
-            var as7 = averageScores.Item3;
-            var as3 = averageScores.Item2;
-            var as1 = averageScores.Item1;
-            string result = $"Your average score for the week is {as7}.\n"
-                + $"Your average score for the last 3 days is {as3}.\n"
-                + $"Your average score for the last day is {as1}.\n\n"
+            var as7 = Math.Round(averageScores.Item3, 2);
+            var as3 = Math.Round(averageScores.Item2, 2);
+            var as1 = Math.Round(averageScores.Item1, 2);
+            string result = $"Your average score for the week is {as7}/10.\n"
+                + $"Your average score for the last 3 days is {as3}/10.\n"
+                + $"Your average score for the last day is {as1}/10.\n\n"
                 + "So ";
 
             if (as1 > as3 && as3 > as7)
