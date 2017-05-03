@@ -176,7 +176,7 @@ namespace E_News
             List<Tuple<long, int>> ticksAndScores = new List<Tuple<long, int>>();
             while (enumerator.MoveNext())
             {
-                ticksAndScores.Add(Tuple.Create(enumerator.Current.timestamp, enumerator.Current.score));
+                ticksAndScores.Add(Tuple.Create(enumerator.Current.Timestamp, enumerator.Current.Score));
             }
             var averageScores = AverageScores(ticksAndScores);
             var as7 = averageScores.Item3;
@@ -184,7 +184,7 @@ namespace E_News
             var as1 = averageScores.Item1;
             string result = $"Your average score for the week is {as7}.\n"
                 + $"Your average score for the last 3 days is {as3}.\n"
-                + $"Your average score for the last day is {as1}.\n"
+                + $"Your average score for the last day is {as1}.\n\n"
                 + "So ";
 
             if (as1 > as3 && as3 > as7)

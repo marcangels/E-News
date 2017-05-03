@@ -66,10 +66,6 @@ namespace E_News
 		private void GetArticles()
 		{
 			Articles.Clear();
-			Utility.DeleteDatabase();
-			Debug.WriteLine("Database deleted.");
-			Utility.CreateDatabase();
-			Debug.WriteLine("Database created.");
 			Utility.UpdateDatabase();
 			Debug.WriteLine("Database updated.");
 			var db = new SQLiteConnection(Utility.DATABASE_FILENAME);

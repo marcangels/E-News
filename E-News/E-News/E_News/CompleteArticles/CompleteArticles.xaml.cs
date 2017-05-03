@@ -106,7 +106,7 @@ namespace E_News
 				Debug.WriteLine($"{ele.SelectedWord}:{ele.CorrectWord} => {ele.IsCorrect}");
 				if (ele.IsCorrect) score++;
 			});
-			await Navigation.PushAsync(new ResultsView(new ScoreDB() { score = score, timestamp = DateTime.Now.Ticks }));
+			await Navigation.PushAsync(new ResultsView(new ScoreDB() { Score = score, Timestamp = DateTime.Now.Ticks }));
 		}
 
 		private async void GenerateViewAsync()
