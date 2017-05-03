@@ -162,5 +162,84 @@ namespace E_News
 			return result;
 
 		}
+
+        public static string Progression()
+        {
+            var db = new SQLiteConnection(Utility.DATABASE_FILENAME);
+			DateTime now = DateTime.Now;
+			DateTime currentDate = new DateTime(now.Year, now.Month, now.Day, 0, 0, 0);
+            currentDate = currentDate.AddDays(-7);
+            long currentTicks = currentDate.Ticks;
+            var data = db.Query<ScoreDB>("SELECT timestamp, score FROM ScoreDB WHERE timestamp >= ?", currentTicks);
+            var enumerator = data.GetEnumerator();
+            List<Tuple<long, int>> ticksAndScores = new List<Tuple<long, int>>();
+            while (enumerator.MoveNext())
+            {
+                ticksAndScores.Add(Tuple.Create(enumerator.Current.timestamp, enumerator.Current.score));
+            }
+            var averageScores = AverageScores(ticksAndScores);
+            var as7 = averageScores.Item3;
+            var as3 = averageScores.Item2;
+            var as1 = averageScores.Item1;
+            string result = $"Your average score for the week is {as7}.\n"
+                + $"Your average score for the last 3 days is {as3}.\n"
+                + $"Your average score for the last day is {as1}.\n"
+                + "So ";
+
+            if (as1 > as3 && as3 > as7)
+            {
+                result += "it's very good!";
+            } else {
+                if (as7 > as3 && as3 > as1)
+                {
+                    result += "you have some progress to do!";
+                } else {
+                    result += "keep going!";
+                }
+            }
+            return result;
+        }
+
+		private static Tuple<double, double, double> AverageScores(List<Tuple<long, int>> scores)
+		{
+			DateTime now = DateTime.Now;
+			DateTime currentDate = new DateTime(now.Year, now.Month, now.Day, 0, 0, 0);
+			currentDate = currentDate.AddDays(-1);
+			long ticks1dayBefore = currentDate.Ticks;
+			currentDate = currentDate.AddDays(-2);
+			long ticks3daysBefore = currentDate.Ticks;
+			currentDate = currentDate.AddDays(-4);
+			long ticks1weekBefore = currentDate.Ticks;
+			int sum1day = 0;
+			int sum3days = 0;
+			int sum1week = 0;
+			int it1day = 0;
+			int it3days = 0;
+			int it1week = 0;
+			foreach (Tuple<long, int> scoreTuple in scores)
+			{
+				long ticks = scoreTuple.Item1;
+				int score = scoreTuple.Item2;
+				if (ticks >= ticks1weekBefore)
+				{
+					sum1week += score;
+					it1week++;
+				}
+				if (ticks >= ticks3daysBefore)
+				{
+					sum3days += score;
+					it3days++;
+				}
+				if (ticks >= ticks1dayBefore)
+				{
+					sum1day += score;
+					it1day++;
+				}
+			}
+			double averageScoreOn1day = (double)sum1day / (double)it1day;
+			double averageScoreOn3days = (double)sum3days / (double)it3days;
+			double averageScoreOn1Week = (double)sum1week / (double)it1week;
+			return Tuple.Create(averageScoreOn1day, averageScoreOn3days, averageScoreOn1Week);
+		}
 	}
 }

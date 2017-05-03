@@ -57,6 +57,7 @@ namespace E_News
 				.OrderByDescending(pair => pair.Value)
 				.Where(pair => wordRegex.IsMatch(pair.Key))
 				.Where(pair => !stopWords.Contains(pair.Key))
+                .Where(pair => !Regex.IsMatch(originalTargetText, string.Concat(pair.Key.Substring(0, 1).ToUpper(), pair.Key.Substring(1))))
 				.Distinct()
 				.Take(Utility.NUMBER_OF_WORDS)
 				.ToDictionary(pair => pair.Key, pair => pair.Value);
