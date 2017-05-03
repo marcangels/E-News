@@ -12,6 +12,7 @@ namespace E_News
 	{
 		public static Dictionary<string,double> TfIdf(List<string> texts)
 		{
+			string originalTargetText = string.Copy(texts[0]);
 			for (var i = 0; i < texts.Count; i++)
 			{
 				texts[i] = texts[i].ToLower();
@@ -70,7 +71,7 @@ namespace E_News
 			Dictionary<string, int> dicWords = new Dictionary<string, int>();
 			foreach(string word in words)
 			{
-				var index = tmp.IndexOf(word);
+                var index = tmp.IndexOf(word, StringComparison.Ordinal);
 				dicWords[word] = index;
 				Debug.WriteLine($"test: {index}, {word}");
 				tmp = tmp.Remove(index, word.Length);
